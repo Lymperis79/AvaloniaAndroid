@@ -30,6 +30,12 @@ public partial class MainView : UserControl
     private void OnMenuClicked(object? sender, RoutedEventArgs e)
     {
         SettingsPanel.IsVisible = !SettingsPanel.IsVisible;
+
+        // Native WebView surfaces can sit above Avalonia controls on Android.
+        // Hide it while editing so the settings panel receives taps reliably.
+        if (_browser is not null)
+            _browser.IsVisible = !SettingsPanel.IsVisible;
+
         if (SettingsPanel.IsVisible)
             UrlBox.Focus();
     }
@@ -37,6 +43,8 @@ public partial class MainView : UserControl
     private void OnCancelSettingsClicked(object? sender, RoutedEventArgs e)
     {
         SettingsPanel.IsVisible = false;
+        if (_browser is not null)
+            _browser.IsVisible = true;
         StatusText.Text = string.Empty;
     }
 
@@ -97,6 +105,8 @@ public partial class MainView : UserControl
         catch (Exception ex)
         {
             SettingsPanel.IsVisible = true;
+            if (_browser is not null)
+                _browser.IsVisible = false;
             StatusText.Text = $"Could not initialize browser: {ex.Message}";
         }
     }
