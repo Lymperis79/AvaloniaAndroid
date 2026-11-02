@@ -24,11 +24,10 @@
       <TextBlock x:Name="StatusText" />
     </StackPanel>
 
-    <NativeWebView x:Name="Browser"
-                   Grid.Row="1"
-                   Margin="0,8,0,0"
-                   Source="about:blank"
-                   IsVisible="False"
-                   NavigationCompleted="OnNavigationCompleted" />
+    <!-- Create NativeWebView in code only when the user presses Go.
+         This avoids initializing the experimental Android WebView backend at app startup. -->
+    <Grid x:Name="BrowserHost"
+          Grid.Row="1"
+          Margin="0,8,0,0" />
   </Grid>
 </UserControl>
