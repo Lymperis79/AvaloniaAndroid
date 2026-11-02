@@ -1,0 +1,11 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MyAvaloniaApp.MainView">
+  <StackPanel Margin="24" Spacing="12" VerticalAlignment="Center">
+    <TextBlock Text="Hello from Avalonia 12.1.2!" FontSize="22" HorizontalAlignment="Center" />
+    <TextBox x:Name="UrlBox" Text="https://avaloniaui.net" PlaceholderText="https://..." />
+    <Button x:Name="OpenButton" Content="Open in browser" HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center" Click="OnOpenClicked" />
+    <TextBlock x:Name="StatusText" HorizontalAlignment="Center" />
+  </StackPanel>
+</UserControl>
