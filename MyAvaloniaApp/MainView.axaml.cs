@@ -6,6 +6,8 @@ namespace MyAvaloniaApp;
 
 public partial class MainView : UserControl
 {
+    private NativeWebView? _browser;
+
     public MainView() => InitializeComponent();
 
     private void OnOpenClicked(object? sender, RoutedEventArgs e)
@@ -27,33 +29,58 @@ public partial class MainView : UserControl
             return;
         }
 
-        UrlBox.Text = uri.ToString();
-        Browser.IsVisible = true;
-        Browser.Source = uri;
-        StatusText.Text = "Loading...";
+        try
+        {
+            EnsureBrowser();
+            UrlBox.Text = uri.ToString();
+            _browser!.IsVisible = true;
+            _browser.Source = uri;
+            StatusText.Text = "Loading...";
+        }
+        catch (Exception ex)
+        {
+            StatusText.Text = $"Could not initialize browser: {ex.Message}";
+        }
+    }
+
+    private void EnsureBrowser()
+    {
+        if (_browser is not null)
+            return;
+
+        _browser = new NativeWebView
+        {
+            Source = new Uri("about:blank"),
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
+            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Stretch
+        };
+        _browser.NavigationCompleted += OnNavigationCompleted;
+        BrowserHost.Children.Add(_browser);
     }
 
     private void OnBackClicked(object? sender, RoutedEventArgs e)
     {
-        if (!Browser.GoBack())
+        if (_browser is null || !_browser.GoBack())
             StatusText.Text = "No previous page.";
     }
 
     private void OnForwardClicked(object? sender, RoutedEventArgs e)
     {
-        if (!Browser.GoForward())
+        if (_browser is null || !_browser.GoForward())
             StatusText.Text = "No next page.";
     }
 
     private void OnReloadClicked(object? sender, RoutedEventArgs e)
     {
-        if (!Browser.Refresh())
+        if (_browser is null || !_browser.Refresh())
             StatusText.Text = "The page cannot be refreshed yet.";
     }
 
     private void OnCloseClicked(object? sender, RoutedEventArgs e)
     {
-        Browser.IsVisible = false;
+        if (_browser is not null)
+            _browser.IsVisible = false;
+
         StatusText.Text = "Browser closed.";
     }
 
