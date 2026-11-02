@@ -141,7 +141,8 @@ public partial class MainView : UserControl
 
     private void ShowStatus(string message)
     {
+        // Status messages must not reopen the settings panel.
+        // The menu button remains available while the webpage is displayed.
         StatusText.Text = message;
-        SettingsPanel.IsVisible = true;
     }
 }
