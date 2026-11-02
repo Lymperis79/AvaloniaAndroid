@@ -1,11 +1,34 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="MyAvaloniaApp.MainView">
-  <StackPanel Margin="24" Spacing="12" VerticalAlignment="Center">
-    <TextBlock Text="Hello from Avalonia 12.1.2!" FontSize="22" HorizontalAlignment="Center" />
-    <TextBox x:Name="UrlBox" Text="https://avaloniaui.net" PlaceholderText="https://..." />
-    <Button x:Name="OpenButton" Content="Open in browser" HorizontalAlignment="Stretch"
-            HorizontalContentAlignment="Center" Click="OnOpenClicked" />
-    <TextBlock x:Name="StatusText" HorizontalAlignment="Center" />
-  </StackPanel>
+  <Grid RowDefinitions="Auto,*" Margin="12">
+    <StackPanel Grid.Row="0" Spacing="8">
+      <TextBlock Text="In-app browser" FontSize="22" HorizontalAlignment="Center" />
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBox x:Name="UrlBox"
+                 Grid.Column="0"
+                 Text="https://avaloniaui.net"
+                 PlaceholderText="https://..." />
+        <Button Grid.Column="1"
+                Content="Go"
+                Margin="8,0,0,0"
+                MinWidth="64"
+                Click="OnOpenClicked" />
+      </Grid>
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Content="Back" Click="OnBackClicked" />
+        <Button Content="Forward" Click="OnForwardClicked" />
+        <Button Content="Reload" Click="OnReloadClicked" />
+        <Button Content="Close" Click="OnCloseClicked" />
+      </StackPanel>
+      <TextBlock x:Name="StatusText" />
+    </StackPanel>
+
+    <NativeWebView x:Name="Browser"
+                   Grid.Row="1"
+                   Margin="0,8,0,0"
+                   Source="about:blank"
+                   IsVisible="False"
+                   NavigationCompleted="OnNavigationCompleted" />
+  </Grid>
 </UserControl>
